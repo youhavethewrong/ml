@@ -43,3 +43,24 @@
         class-and-attr-prob (conj attr-probs
                                    (probability :salmon))]
     (float (apply * class-and-attr-prob))))
+
+(defn evidence-of-sea-bass
+  [& attrs]
+  (let [attr-probs (map #(probability % :category :sea-bass) attrs)
+        class-and-attr-prob (conj attr-probs
+                                   (probability :sea-bass))]
+    (float (apply * class-and-attr-prob))))
+
+(defn evidence-of-category-with-attrs
+  [category & attrs]
+  (let [attr-probs (map #(probability % :category category) attrs)
+        class-and-attr-prob (conj attr-probs
+                                   (probability category))]
+    (float (apply * class-and-attr-prob))))
+
+(def probability-dark-long-fat-is-salmon
+  (let [attrs [:dark :long :fat]
+        sea-bass? (apply evidence-of-sea-bass attrs)
+        salmon? (apply evidence-of-salmon attrs)]
+    (/ salmon?
+       (+ sea-bass? salmon?))))
