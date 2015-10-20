@@ -48,3 +48,28 @@
 
 (def EN (train-network elman-network dataset :resilient-prop))
 
+(def som (network (neural-pattern :som) :input 4 :output 2))
+
+(defn train-som
+  [data]
+  (let [trainer (trainer :basic-som :network som
+                         :training-set data
+                         :learning-rate 0.7
+                         :neighborhood-fn (neighborhood-F :single))]
+    (train trainer Double/NEGATIVE_INFINITY 10 [])))
+
+(defn train-and-run-som
+  []
+  (let [input [[-1.0 -1.0 1.0 1.0]
+               [1.0 1.0 -1.0 -1.0]]
+        input-data (data :basic-dataset input nil)
+        SOM (train-som input-data)
+        d1 (data :basic (first input))
+        d2 (data :basic (second input))]
+    (println "Pattern 1 class:" (.classify SOM d1))
+    (println "Pattern 2 class:" (.classify SOM d2))
+    SOM))
+
+
+
+
